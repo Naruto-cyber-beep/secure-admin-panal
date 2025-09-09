@@ -1,0 +1,285 @@
+<!-- admin-confirm.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Confirmation — Step 3 — Enter Authentication Code</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background: #0e1649;
+      min-height: 100vh;
+      color: #f0f4ff;
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+    main {
+      background: #161c3d;
+      max-width: 480px;
+      width: 100%;
+      border-radius: 1.25rem;
+      box-shadow: 0 0 32px rgb(59 130 246 / 0.5);
+      padding: 2.5rem 2.5rem 3rem;
+      user-select: none;
+      text-align: center;
+    }
+    p.step-label {
+      font-weight: 600;
+      text-align: center;
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+      color: #7892c3;
+      user-select: none;
+    }
+    h1 {
+      font-weight: 900;
+      font-size: 1.9rem;
+      margin-bottom: 2rem;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.25rem;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #bad1fa;
+    }
+    input {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      border-radius: 0.5rem;
+      border: 2px solid #2641a6;
+      background: #1b2361;
+      color: #e4e9ff;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+      margin-bottom: 1.5rem;
+      font-family: 'Inter', sans-serif;
+      user-select: text;
+    }
+    input:focus {
+      outline: none;
+      border-color: #4f83ff;
+      box-shadow: 0 0 8px rgba(79, 131, 255, 0.65);
+    }
+    button.submit-btn {
+      width: 100%;
+      padding: 1rem 0;
+      background: linear-gradient(90deg, #5499ff 0%, #2270e1 100%);
+      border-radius: 9999px;
+      font-weight: 800;
+      color: #fff;
+      font-size: 1.15rem;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgb(40 117 255 / 0.7);
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+    button.submit-btn:hover {
+      background: linear-gradient(90deg, #3164ca 0%, #194b94 100%);
+    }
+    .error-msg {
+      color: #ff6b6b;
+      font-weight: 600;
+      margin-bottom: 1.8rem;
+      min-height: 1.2em;
+      user-select: none;
+    }
+    .work-credentials {
+      background: #24336b;
+      padding: 1.3rem 1.5rem;
+      border-radius: 1rem;
+      color: #a6d375;
+      font-weight: 700;
+      font-family: monospace;
+      font-size: 1.1rem;
+      margin-bottom: 1.75rem;
+      white-space: pre-wrap;
+      text-align: left;
+      user-select: all;
+      cursor: pointer;
+    }
+    .btn-secondary {
+      background-color: #3755a0;
+      border: none;
+      border-radius: 0.5rem;
+      padding: 0.9rem 1.5rem;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.25s ease;
+      margin-bottom: 0.8rem;
+      user-select: none;
+      width: 100%;
+    }
+    .btn-secondary:hover {
+      background-color: #243b73;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="step-label" aria-live="polite">Step 3 — Admin Confirmation</p>
+    <h1>Enter Your 10-Digit Authentication Code</h1>
+
+    <form id="codeForm" novalidate autocomplete="off" aria-label="Admin code confirmation form">
+      <label for="authCode">Authentication Code</label>
+      <input id="authCode" name="authCode" type="text" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" minlength="10" placeholder="Enter 10-digit code" required aria-required="true" autocomplete="one-time-code" />
+      <p class="error-msg" id="errorMsg" role="alert" aria-live="assertive"></p>
+      <button type="submit" class="submit-btn" aria-label="Confirm authentication code">Confirm</button>
+    </form>
+
+    <section id="credentialsSection" hidden aria-live="polite" tabindex="0" style="margin-top: 1.5rem;">
+      <p class="work-credentials" id="workCredentials" title="Click to copy credentials to clipboard" tabindex="0" role="textbox" aria-readonly="true"></p>
+      
+      <button id="copyBtn" class="btn-secondary" aria-label="Copy credentials to clipboard">Copy Credentials</button>
+      <button id="downloadBtn" class="btn-secondary" aria-label="Download credentials as text file">Download Credentials</button>
+    </section>
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore-compat.js"></script>
+
+  <script>
+    // REPLACE with your own Firebase configuration
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_AUTH_DOMAIN",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_STORAGE_BUCKET",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID",
+      measurementId: "YOUR_MEASUREMENT_ID"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const codeForm = document.getElementById('codeForm');
+    const authCodeInput = document.getElementById('authCode');
+    const errorMsg = document.getElementById('errorMsg');
+    const credentialsSection = document.getElementById('credentialsSection');
+    const workCredentials = document.getElementById('workCredentials');
+    const copyBtn = document.getElementById('copyBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+
+    let savedCredentials = '';
+
+    // Utility functions
+    function generateRandomString(length) {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let result = '';
+      for (let i = 0; i < length; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return result;
+    }
+
+    function generateWorkEmail() {
+      return `admin-${generateRandomString(4).toLowerCase()}@shadowedx.work`;
+    }
+
+    function generateWorkID() {
+      const timestamp = Date.now();
+      return `SHDX-${timestamp}-${generateRandomString(3).toUpperCase()}`;
+    }
+
+    async function confirmCode(code) {
+      errorMsg.textContent = '';
+      credentialsSection.hidden = true;
+      savedCredentials = '';
+
+      if (!/^\d{10}$/.test(code)) {
+        errorMsg.textContent = 'Code must be exactly 10 numeric digits.';
+        return;
+      }
+
+      try {
+        // Query adminCodes collection for code document
+        const codeQuery = await db.collection('adminCodes').where('code', '==', code).limit(1).get();
+        if (codeQuery.empty) {
+          errorMsg.textContent = 'Invalid code. Please try again.';
+          return;
+        }
+        const codeDoc = codeQuery.docs[0];
+        const codeData = codeDoc.data();
+        if (codeData.used) {
+          errorMsg.textContent = 'Code has already been used.';
+          return;
+        }
+
+        // Fetch related application doc
+        const appDocRef = db.collection('adminApplications').doc(codeData.applicationId);
+        const appDocSnap = await appDocRef.get();
+        if (!appDocSnap.exists) {
+          errorMsg.textContent = 'Associated application not found.';
+          return;
+        }
+
+        // Generate credentials
+        const workEmail = generateWorkEmail();
+        const workID = generateWorkID();
+
+        // Update code doc used=true
+        await codeDoc.ref.update({ used: true });
+
+        // Update application doc
+        await appDocRef.update({
+          workEmail,
+          workID,
+          adminAssigned: true,
+          assignedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          status: 'approved'
+        });
+
+        // Save credentials separately
+        await db.collection('adminAccounts').add({
+          workEmail,
+          workID,
+          applicationId: codeData.applicationId,
+          assignedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        savedCredentials =
+`Work Email: ${workEmail}
+Work ID: ${workID}
+
+Keep these credentials safe.`;
+
+        workCredentials.textContent = savedCredentials;
+        credentialsSection.hidden = false;
+        credentialsSection.focus();
+
+      } catch (err) {
+        errorMsg.textContent = 'An error occurred. Please try again later.';
+        console.error(err);
+      }
+    }
+
+    copyBtn.addEventListener('click', () => {
+      if (!savedCredentials) return;
+      navigator.clipboard.writeText(savedCredentials).then(() => {
+        alert('Credentials copied to clipboard.');
+      }).catch(() => alert('Failed to copy. Please copy manually.'));
+    });
+
+    downloadBtn.addEventListener('click', () => {
+      if (!savedCredentials) return;
+      const blob = new Blob([savedCredentials], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'ShadowedX_Admin_Credentials.txt';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    codeForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      confirmCode(authCodeInput.value.trim());
+    });
+  </script>
+</body>
+</html>
