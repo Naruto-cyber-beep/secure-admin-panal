@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Shadow Coder | Welcome to Admin Journey</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css" rel="stylesheet" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+    body, html {
+      margin: 0; padding: 0; height: 100%;
+      background: linear-gradient(135deg, #0f172a 0%, #2563eb 100%);
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: white;
+      overflow: hidden;
+    }
+    .container {
+      max-width: 480px;
+      padding: 2.5rem 2.5rem 3rem;
+      border-radius: 1.5rem;
+      background: rgba(13, 42, 110, 0.85);
+      box-shadow: 0 0 40px rgba(37, 99, 235, 0.6);
+      backdrop-filter: blur(12px);
+      user-select: none;
+    }
+    h1 {
+      font-size: 2.75rem;
+      font-weight: 900;
+      letter-spacing: -0.05em;
+      margin-bottom: 1.5rem;
+      text-shadow: 0 4px 12px rgb(37 99 235 / 0.9);
+    }
+    p {
+      font-size: 1.25rem;
+      font-weight: 500;
+      margin-bottom: 3rem;
+      color: #bfdbfe;
+      letter-spacing: 0.02em;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.25);
+    }
+    .btn-primary {
+      background: linear-gradient(90deg, #2563eb 0%, #3b82f6 100%);
+      font-size: 1.15rem;
+      font-weight: 700;
+      padding: 1.25rem 3rem;
+      border-radius: 9999px;
+      color: white;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(59, 130, 246, 0.7);
+      transition: all 0.3s ease;
+      user-select: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+    }
+    .btn-primary:hover,
+    .btn-primary:focus-visible {
+      background: linear-gradient(90deg, #1d4ed8 0%, #2563eb 100%);
+      box-shadow: 0 15px 30px rgba(37, 99, 235, 0.85);
+      outline: none;
+      transform: translateY(-2px);
+    }
+    .btn-primary svg {
+      width: 1.4rem;
+      height: 1.4rem;
+      stroke: white;
+      stroke-width: 2.5;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+      fill: none;
+    }
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 2rem;
+      }
+      p {
+        font-size: 1rem;
+        margin-bottom: 2.5rem;
+      }
+      .btn-primary {
+        width: 100%;
+        padding: 1.1rem 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="container" role="main" aria-label="Welcome to Admin Journey">
+    <h1>Continue to Admin Journey</h1>
+    <p>Empower your experience managing high-quality educational content and tools on Shadow Coder.</p>
+    <button class="btn-primary" id="continueBtn" aria-haspopup="true" aria-controls="auth-admin-page" aria-label="Continue to Authentication Admin Page">
+      Continue
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M5 12h14M13 6l6 6-6 6"/>
+      </svg>
+    </button>
+  </main>
+
+  <script>
+    document.getElementById('continueBtn').addEventListener('click', () => {
+      window.location.href = 'auth-admin.html';
+    });
+  </script>
+</body>
+</html>
