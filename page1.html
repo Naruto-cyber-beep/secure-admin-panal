@@ -1,92 +1,169 @@
-<!-- admin-auth.html -->
+<!-- page1.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Admin Control Panel | Secure Onboarding</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Application — Step 1 of 3 — Personal Details</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background: #0e1649;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+      color: #f0f4ff;
+      font-family: 'Inter', sans-serif;
+    }
+    main {
+      background: #161c3d;
+      max-width: 480px;
+      width: 100%;
+      border-radius: 1.25rem;
+      box-shadow: 0 0 32px rgb(59 130 246 / 0.5);
+      padding: 2.5rem 2.5rem 3rem;
+      user-select: none;
+    }
+    h1 {
+      font-weight: 900;
+      font-size: 1.9rem;
+      margin-bottom: 1.25rem;
+      color: #d3daf5;
+      letter-spacing: -0.02em;
+      text-align: center;
+    }
+    p.step-label {
+      font-weight: 600;
+      text-align: center;
+      font-size: 0.95rem;
+      margin-bottom: 2rem;
+      color: #7892c3;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.22rem;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #bad1fa;
+    }
+    input {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      border-radius: 0.5rem;
+      border: 2px solid #2641a6;
+      background: #1b2361;
+      color: #e4e9ff;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+      margin-bottom: 1.25rem;
+      font-family: 'Inter', sans-serif;
+    }
+    input:focus {
+      outline: none;
+      border-color: #4f83ff;
+      box-shadow: 0 0 8px rgba(79, 131, 255, 0.65);
+    }
+    button.next-btn {
+      width: 100%;
+      padding: 1rem 0;
+      background: linear-gradient(90deg, #5499ff 0%, #2270e1 100%);
+      border-radius: 9999px;
+      font-weight: 800;
+      color: #fff;
+      font-size: 1.15rem;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgb(40 117 255 / 0.7);
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+    button.next-btn:hover {
+      background: linear-gradient(90deg, #3164ca 0%, #194b94 100%);
+    }
+    .error-msg {
+      color: #ff6b6b;
+      margin-bottom: 1.2rem;
+      font-weight: 600;
+      min-height: 1.2em;
+      user-select: none;
+    }
+  </style>
 </head>
-<body class="bg-gray-900 min-h-screen flex items-center justify-center">
-  <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md space-y-5">
-    <div class="flex flex-col items-center space-y-2">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-blue-800" fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect x="4" y="4" width="16" height="16" stroke-width="2"></rect></svg>
-      <h2 class="text-xl font-bold text-gray-800">Admin Control Panel Setup</h2>
-    </div>
-    <form id="step1" class="flex flex-col gap-3">
-      <input id="workEmail" type="email" placeholder="Enter Work Email" class="border p-2 rounded" required />
-      <button id="workMailLogin" type="submit" class="bg-blue-700 text-white rounded py-2 hover:bg-blue-900">Login</button>
-      <span class="text-gray-600 text-xs">or</span>
-      <button id="googleBtn" type="button" class="flex items-center justify-center gap-2 border py-2 rounded hover:bg-gray-50"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" class="h-4">Login with Google</button>
+<body>
+  <main>
+    <p class="step-label">Step 1 of 3 — Personal Details</p>
+    <h1>Tell Us About Yourself</h1>
+    <form id="page1Form" novalidate autocomplete="off" aria-label="Personal details form">
+      <label for="fullName">Full Name</label>
+      <input id="fullName" name="fullName" type="text" placeholder="John Doe" required aria-required="true" autocomplete="name"/>
+
+      <label for="address">Address</label>
+      <input id="address" name="address" type="text" placeholder="1234 Elm Street, Springfield" required aria-required="true" autocomplete="street-address"/>
+
+      <label for="mobileNumber">Mobile Number</label>
+      <input id="mobileNumber" name="mobileNumber" type="tel" placeholder="+1234567890" required aria-required="true" autocomplete="tel" pattern="^[0-9+\-\s]{7,15}$"/>
+
+      <p role="alert" aria-live="assertive" id="errorMsg" class="error-msg"></p>
+
+      <button type="submit" class="next-btn" aria-label="Next step">Next</button>
     </form>
-    <div class="text-xs text-gray-600 text-center">Don't have a work email? <button id="showSetup" class="underline text-blue-700">Setup</button></div>
-    <form id="setupForm" class="flex flex-col gap-3 hidden">
-      <input id="setupName" type="text" placeholder="Your Full Name" class="border p-2 rounded" required />
-      <input id="setupEmail" type="email" placeholder="Email" class="border p-2 rounded" required />
-      <button id="setupGoogleBtn" type="button" class="flex items-center justify-center gap-2 border py-2 rounded hover:bg-gray-50"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" class="h-4"> Use Google to fill email</button>
-      <textarea id="reason" rows="2" class="border p-2 rounded" placeholder="Enter reason for requesting admin panel access" required></textarea>
-      <button id="sendEmailBtn" type="button" class="bg-blue-800 text-white rounded py-2 hover:bg-blue-900">Send Request</button>
-      <span id="setupMsg" class="text-green-700 text-sm"></span>
-    </form>
-    <form id="verifyCodeForm" class="flex flex-col gap-3 hidden">
-      <input id="authCode" type="text" placeholder="Enter 10-digit Auth Code" class="border p-2 rounded" maxlength="10" required />
-      <button class="bg-blue-700 text-white rounded py-2 hover:bg-blue-900">Verify Code</button>
-      <span id="codeStatus" class="text-sm"></span>
-    </form>
-  </div>
-  <!-- Firebase SDK -->
+  </main>
   <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth-compat.js"></script>
-  <!-- EmailJS SDK -->
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore-compat.js"></script>
   <script>
-    emailjs.init('rpRk2Ug-KURSyDb5U'); // publicKey
-    const emailjsConfig = {
-      serviceID: "service_fnfsdzb",
-      templateID: "template_t87ngjb"
+    // REPLACE with your own Firebase configuration
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_AUTH_DOMAIN",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_STORAGE_BUCKET",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID",
+      measurementId: "YOUR_MEASUREMENT_ID"
     };
-    // Step Form Logic
-    document.getElementById('showSetup').onclick = () => {
-      document.getElementById('setupForm').classList.remove('hidden');
-      document.getElementById('step1').classList.add('hidden');
-    };
-    document.getElementById('setupGoogleBtn').onclick = () => {
-      // Use Firebase Google provider just to get the email
-      const provider = new firebase.auth.GoogleAuthProvider();
-      firebase.auth().signInWithPopup(provider).then(r => {
-        document.getElementById('setupEmail').value = r.user.email;
-        firebase.auth().signOut();
-      }).catch(()=>{});
-    };
-    // EmailJS Approval Request
-    document.getElementById('sendEmailBtn').onclick = function() {
-      const name = document.getElementById('setupName').value;
-      const email = document.getElementById('setupEmail').value;
-      const reason = document.getElementById('reason').value;
-      if(!name||!email||!reason) return;
-      emailjs.send(emailjsConfig.serviceID, emailjsConfig.templateID, {
-        to_email: "pushpa2987d@gmail.com",
-        from_name: name,
-        from_email: email,
-        message: reason
-      }).then(() => {
-        document.getElementById('setupMsg').innerText = 'Request sent! Await code on your email.';
-        document.getElementById('verifyCodeForm').classList.remove('hidden');
-      });
-    };
-    // Auth code verification, for demonstration only; actual validation logic must check code in Firebase
-    document.getElementById('verifyCodeForm').onsubmit = function(e){
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const form = document.getElementById('page1Form');
+    const errorMsg = document.getElementById('errorMsg');
+
+    // Validate mobile format helper (7-15 digits, allow +, -, space)
+    function isValidMobile(mobile) {
+      const norm = mobile.trim();
+      return /^[0-9+\-\s]{7,15}$/.test(norm);
+    }
+
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const code = document.getElementById('authCode').value;
-      // TODO: Validate code from Firebase, example placeholder:
-      firebase.database().ref('adminCodes/' + code).once('value', snap => {
-        if(snap.exists()) {
-          document.getElementById('codeStatus').innerText = "Code valid. You may proceed to log in as admin.";
-        } else {
-          document.getElementById('codeStatus').innerText = "Incorrect code. Try again later.";
-        }
-      });
-    };
+      errorMsg.textContent = '';
+      const fullName = form.fullName.value.trim();
+      const address = form.address.value.trim();
+      const mobileNumber = form.mobileNumber.value.trim();
+
+      if (!fullName || !address || !mobileNumber) {
+        errorMsg.textContent = 'Please fill in all fields.';
+        return;
+      }
+      if (!isValidMobile(mobileNumber)) {
+        errorMsg.textContent = 'Enter a valid mobile number (7 to 15 digits, can include +, -, spaces).';
+        return;
+      }
+
+      try {
+        // Save to Firestore under adminApplications with status "pending"
+        const docRef = await db.collection('adminApplications').add({
+          page1Data: { fullName, address, mobileNumber },
+          status: 'pending',
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        // Redirect to page2.html with docID
+        window.location.href = `page2.html?applicationId=${docRef.id}`;
+      } catch (err) {
+        console.error(err);
+        errorMsg.textContent = 'Failed to save data. Please try again.';
+      }
+    });
   </script>
 </body>
 </html>
